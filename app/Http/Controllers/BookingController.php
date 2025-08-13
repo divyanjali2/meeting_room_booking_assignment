@@ -23,7 +23,9 @@ class BookingController extends Controller
 
     public function list(Request $request) {
         // Return all bookings (for table) with user
+        $today = now()->format('Y-m-d');
         $bookings = Booking::with('user')
+            ->where('date', '>=', $today)
             ->orderBy('date')
             ->orderBy('start_time')
             ->get();

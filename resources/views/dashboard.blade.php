@@ -1,62 +1,104 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h1 class="text-2xl font-bold mb-6">Active Bookings</h1>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" x-data="bookingsDisplay" x-init="fetchBookings()">
+        <h1 class="text-2xl font-bold mb-6">Active Bookings</h1>
 
-    <div class="bg-white rounded-lg shadow overflow-hidden">
-        <div class="p-6">
-            <div id="activeBookings" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <!-- Active bookings will be populated here via JavaScript -->
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="p-6">
+                {{-- Debug info --}}
+                <div x-show="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relativ
+                e mb-4">
+                    <span x-text="error"></span>
+                </div>
+
+                {{-- Loading indicator --}}
+                <div x-show="loading"
+                    class="flex justify-center items-center py-8">
+                    <svg class="animate-spin h-8 w-8 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+
+                {{-- No bookings message --}}
+                <div x-show="!loading && bookings.length === 0" class="text-center py-8 text-gray-500"> No active bookings found</div>
+
+                {{-- Bookings grid --}}
+                <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3" x-show="!loading && bookings.length > 0">
+                    <template x-for="booking in bookings" :key="booking.id">
+                        <div class="bg-gray-50 p-4 rounded-lg border transition-all duration-300 hover:shadow-md">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold" x-text="booking.room"></span>
+                                <span x-show="isToday(booking.date)" class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">
+                                    Today
+                                </span>
+                            </div>
+                            <div class="text-sm text-gray-600">
+                                <div class="mb-1">
+                                    <span class="font-medium">Date:</span>
+                                    <span x-text="formatDate(booking.date)"></span>
+                                </div>
+                                <div class="mb-1">
+                                    <span class="font-medium">Time:</span>
+                                    <span x-text="booking.start_time + ' - ' + booking.end_time"></span>
+                                </div>
+                                <div>
+                                    <span class="font-medium">Booked by:</span>
+                                    <span x-text="booking.user?.name || 'Unknown'"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Fetch active bookings
-    fetch('/api/bookings')
-        .then(response => response.json())
-        .then(bookings => {
-            const today = new Date().toISOString().slice(0,10);
-            const activeBookings = bookings.filter(booking => booking.date >= today);
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('bookingsDisplay', () => ({
+                bookings: [],
+                loading: true,
+                error: null,
 
-            const container = document.getElementById('activeBookings');
+                async fetchBookings() {
+                    this.loading = true;
+                    this.error = null;
 
-            if (activeBookings.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-full text-center py-8 text-gray-500">
-                        No active bookings found
-                    </div>
-                `;
-                return;
-            }
+                    try {
+                        const response = await fetch('/api/bookings');
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        const data = await response.json();
+                        this.bookings = data;
+                    } catch (error) {
+                        console.error('Error:', error);
+                        this.error = 'Failed to load bookings. Please try again.';
+                    } finally {
+                        this.loading = false;
+                    }
 
-            container.innerHTML = activeBookings.map(booking => `
-                <div class="bg-gray-50 p-4 rounded-lg border">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="font-semibold text-lg">${booking.room}</h3>
-                        <span class="px-2 py-1 text-xs rounded ${
-                            booking.date === today ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
-                        }">${booking.date === today ? 'Today' : 'Upcoming'}</span>
-                    </div>
-                    <div class="space-y-1 text-sm text-gray-600">
-                        <p><span class="font-medium">Date:</span> ${booking.date}</p>
-                        <p><span class="font-medium">Time:</span> ${booking.start_time} - ${booking.end_time}</p>
-                        <p><span class="font-medium">Booked By:</span> ${booking.user?.name ?? 'Unknown'}</p>
-                    </div>
-                </div>
-            `).join('');
-        })
-        .catch(error => {
-            console.error('Error fetching bookings:', error);
-            document.getElementById('activeBookings').innerHTML = `
-                <div class="col-span-full text-center py-8 text-red-500">
-                    Error loading bookings
-                </div>
-            `;
+                    // Refresh every minute
+                    setTimeout(() => this.fetchBookings(), 60000);
+                },
+
+                isToday(date) {
+                    const today = new Date().toISOString().slice(0, 10);
+                    return date === today;
+                },
+
+                formatDate(dateStr) {
+                    const date = new Date(dateStr);
+                    return date.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                }
+            }));
         });
-});
-</script>
+    </script>
 @endsection
