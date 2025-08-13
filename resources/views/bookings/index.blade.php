@@ -56,10 +56,10 @@
                         <td class="p-2">
                             <template x-if="isMyBooking(booking)">
                                 <div>
-                                    <button @click="editBooking(booking)"
-                                            class="px-2 py-1 border rounded mr-2">Edit</button>
-                                    <button @click="deleteBooking(booking)"
-                                            class="px-2 py-1 border rounded">Delete</button>
+                                    <template x-if="booking.status !== 'Completed'">
+                                        <button @click="editBooking(booking)" class="px-2 py-1 border rounded mr-2">Edit</button>
+                                    </template>
+                                    <button @click="deleteBooking(booking)" class="px-2 py-1 border rounded">Delete</button>
                                 </div>
                             </template>
                         </td>
