@@ -11,7 +11,7 @@ class Booking extends Model
     protected $fillable = ['room', 'date', 'start_time', 'end_time'];
 
     protected $casts = [
-        'date' => 'date',
+        'date' => 'datetime:Y-m-d',
     ];
 
     protected $appends = ['status'];
