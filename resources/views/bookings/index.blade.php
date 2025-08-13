@@ -9,7 +9,6 @@
     <select id="filterRoom" class="border px-3 py-2 rounded">
       <option value="">All Rooms</option>
       <option>Room A</option>
-      
       <option>Room B</option>
     </select>
     <input type="date" id="filterDate" class="border px-3 py-2 rounded" />
