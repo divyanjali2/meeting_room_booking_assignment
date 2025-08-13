@@ -35,17 +35,15 @@ class BookingPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Booking $booking): bool
-    {
-        return false;
+    public function update(User $user, Booking $booking): bool {
+        return $user->id === $booking->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Booking $booking): bool
-    {
-        return false;
+    public function delete(User $user, Booking $booking): bool {
+        return $user->id === $booking->user_id;
     }
 
     /**
