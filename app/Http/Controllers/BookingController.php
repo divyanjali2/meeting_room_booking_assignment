@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class BookingController extends Controller
 {
+    use AuthorizesRequests;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index() {
         // Blade page
         return view('bookings.index');

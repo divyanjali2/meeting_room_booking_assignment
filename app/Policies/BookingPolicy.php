@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Booking;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class BookingPolicy
 {
@@ -13,7 +12,7 @@ class BookingPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +20,7 @@ class BookingPolicy
      */
     public function view(User $user, Booking $booking): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +28,7 @@ class BookingPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
