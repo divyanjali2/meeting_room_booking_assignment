@@ -162,8 +162,9 @@
                         this.editingId = null;
                         this.resetForm();
                         await this.fetchData();
+                        toastr.success('Booking saved successfully');
                     } catch (error) {
-                        alert(error.message || 'An error occurred while saving the booking');
+                        toastr.error(error.message || 'An error occurred while saving the booking');
                     }
                 },
 
@@ -180,9 +181,10 @@
 
                         if (response.ok) {
                             await this.fetchData();
+                            toastr.success('Booking deleted successfully');
                         }
                     } catch (error) {
-                        alert('Error deleting booking');
+                        toastr.error('Error deleting booking');
                     }
                 },
 
