@@ -211,7 +211,6 @@
                 },
 
                 editBooking(booking) {
-                    // Format times to ensure HH:mm format for time inputs
                     const formatTimeForInput = (time) => {
                         if (!time) return '';
                         const [hours, minutes] = time.split(':');

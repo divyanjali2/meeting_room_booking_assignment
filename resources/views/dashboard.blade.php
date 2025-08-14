@@ -30,9 +30,16 @@
                         <div class="bg-gray-50 p-4 rounded-lg border transition-all duration-300 hover:shadow-md">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="font-semibold" x-text="booking.room"></span>
-                                <span x-show="isToday(booking.date)" class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">
-                                    Today
-                                </span>
+                                <div class="flex gap-2">
+                                    <span x-show="isActive(booking)" class="bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow flex items-center">
+                                        <span class="w-2 h-2 bg-white rounded-full mr-1"></span>
+                                        Ongoing
+                                    </span>
+                                    <span x-show="isUpcoming(booking)" class="bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full shadow flex items-center">
+                                        <span class="w-2 h-2 bg-white rounded-full mr-1"></span>
+                                        Upcoming
+                                    </span>
+                                </div>
                             </div>
                             <div class="text-sm text-gray-600">
                                 <div class="mb-1">
@@ -72,11 +79,17 @@
                             throw new Error(`HTTP error! status: ${response.status}`);
                         }
                         const data = await response.json();
-                        // Filter out past bookings
+                        // Filter for active and upcoming bookings
                         const now = new Date();
                         this.bookings = data.filter(booking => {
-                            const bookingDate = new Date(booking.date + ' ' + booking.end_time);
-                            return bookingDate > now;
+                            const startDateTime = new Date(booking.date + ' ' + booking.start_time);
+                            const endDateTime = new Date(booking.date + ' ' + booking.end_time);
+                            return endDateTime > now || startDateTime <= now && endDateTime >= now);
+                        }).sort((a, b) => {
+                            // Sort by date and start time
+                            const dateA = new Date(a.date + ' ' + a.start_time);
+                            const dateB = new Date(b.date + ' ' + b.start_time);
+                            return dateA - dateB;
                         });
                     } catch (error) {
                         console.error('Error:', error);
@@ -102,6 +115,19 @@
                         month: 'long',
                         day: 'numeric'
                     });
+                },
+
+                isActive(booking) {
+                    const now = new Date();
+                    const startDateTime = new Date(booking.date + ' ' + booking.start_time);
+                    const endDateTime = new Date(booking.date + ' ' + booking.end_time);
+                    return startDateTime <= now && endDateTime >= now;
+                },
+
+                isUpcoming(booking) {
+                    const now = new Date();
+                    const startDateTime = new Date(booking.date + ' ' + booking.start_time);
+                    return startDateTime > now;
                 }
             }));
         });
