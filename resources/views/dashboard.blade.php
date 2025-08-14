@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" x-data="bookingsDisplay" x-init="fetchBookings()">
-        <h1 class="text-2xl font-bold mb-6">Active Bookings</h1>
+        <h1 class="text-2xl font-bold mb-6">Current & Upcoming Bookings</h1>
 
         <div class="bg-white rounded-lg shadow overflow-hidden">
             <div class="p-6">
@@ -84,7 +84,8 @@
                         this.bookings = data.filter(booking => {
                             const startDateTime = new Date(booking.date + ' ' + booking.start_time);
                             const endDateTime = new Date(booking.date + ' ' + booking.end_time);
-                            return endDateTime > now || startDateTime <= now && endDateTime >= now);
+                            return endDateTime > now ||
+                                (startDateTime <= now && endDateTime >= now);
                         }).sort((a, b) => {
                             // Sort by date and start time
                             const dateA = new Date(a.date + ' ' + a.start_time);
