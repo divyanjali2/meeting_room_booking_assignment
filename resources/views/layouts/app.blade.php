@@ -25,7 +25,7 @@
             @include('components.sidebar')
 
             <!-- Main Content -->
-            <div class="pl-64"> <!-- Add left padding to accommodate sidebar -->
+            <div class="pl-64"> 
                 <!-- Page Heading -->
                 @isset($header)
                     <header class="bg-white shadow">

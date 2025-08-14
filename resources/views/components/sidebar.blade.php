@@ -49,7 +49,7 @@
             </div>
             <div class="ml-3">
                 <p class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</p>
-                <a href="{{ route('profile.edit') }}" class="text-xs font-medium text-gray-500 hover:text-gray-700">View Profile</a>
+                <a href="{{ route('profile.show') }}" class="text-xs font-medium text-gray-500 hover:text-gray-700">View Profile</a>
             </div>
         </div>
     </div>
