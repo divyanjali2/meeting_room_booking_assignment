@@ -1,84 +1,93 @@
-# Meeting Room Booking System
+# 🏢 Meeting Room Booking
 
-A simple system to manage meeting room bookings using Laravel and Alpine.js.
+This module is a **Laravel + Alpine.js**-based interface for managing **meeting room bookings**. Users can **create, edit, delete**, filter by room and date, and view only their own bookings.
 
-## Features
+---
 
-- Create, edit, and delete bookings (user-specific)
-- Filter bookings by room and date
-- Sort bookings by room, date, start time, and end time
-- Live updates every minute
-- Form validation and error handling
-- Toastr notifications for success and error messages
+## ✨ Features
 
-## Installation
+### 📅 Booking Management
+- ➕ Create new bookings with **room, date, start time, and end time**.
+- ✏️ Edit existing bookings (**only your own bookings**).
+- 🗑️ Delete bookings (**only your own bookings**).
 
-1. Clone the repository:
+### 🔍 Filters & Sorting
+- 🏷️ Filter bookings by **room** and **date**.
+- 👀 Toggle between viewing **all bookings** or **only your bookings**.
+- ↕️ Sort bookings by **room, date, start time, or end time**.
 
-```bash
-git clone <repository_url>
-cd <project_folder>
-Install dependencies:
+### ⚡ Live Updates
+- ⏱️ Bookings table refreshes **automatically every minute**.
+- 📝 Edit modal appears inline with **pre-filled form**.
 
-bash
+### ✅ Validation
+- ⏰ Ensures correct **time formatting (`HH:mm`)**.
+- ❌ Shows error messages if input is invalid.
+
+---
+
+## 🛠️ Technologies Used
+
+- 🖥️ **Laravel** (backend & API)
+- 💻 **Alpine.js** (frontend interactivity)
+- 🎨 **Tailwind CSS** (styling)
+- 🔔 **Toastr** (notifications)
+
+---
+
+## 🚀 Installation
+
+1. Clone the repository.
+2. Run:
+   ```bash
+   composer install
+   npm install && npm run dev
+Set up your .env file with database credentials:
+
+env
 Copy
 Edit
-composer install
-npm install
-npm run dev
-Configure environment:
-
-Copy .env.example to .env
-
-Set up database credentials
-
-Generate application key:
-
-bash
-Copy
-Edit
-php artisan key:generate
+APP_NAME="Meeting Room Booking"
+DB_DATABASE=meeting_booking
 Run migrations:
 
 bash
 Copy
 Edit
 php artisan migrate
-Serve the application:
+Serve the app:
 
 bash
 Copy
 Edit
 php artisan serve
-API Endpoints
-Method	Endpoint	Description
-GET	/api/bookings	Get all bookings
-GET	/api/bookings/mine	Get bookings for logged-in user
-POST	/api/bookings	Create a new booking
-PUT	/api/bookings/{id}	Update a booking
-DELETE	/api/bookings/{id}	Delete a booking
+🖱️ Usage
+Navigate to the Meeting Room Booking page.
 
-Frontend
-Built with Alpine.js
+Use the filters to narrow down bookings.
 
-Responsive table and booking form
+➕ Add new bookings using the form.
 
-Inline editing for user’s own bookings
+✏️ Edit or 🗑️ delete bookings you created.
 
-Auto-refresh every minute
+⏱️ Bookings update automatically every minute.
 
-Notes
-Only authenticated users can manage bookings
+📌 Notes
+🔐 Only authenticated users can book, edit, or delete bookings.
 
-Time inputs use HH:mm 24-hour format
+🏢 Current implementation supports "Room A" and "Room B"; additional rooms can be added in the select options.
 
-Room options can be updated in the form dropdown
+⏰ Time fields are validated to prevent incorrect formats.
 
-Future Enhancements
-Recurring bookings
+📂 File Structure
+resources/views/bookings.blade.php → Main bookings page
 
-Room capacity management
+resources/views/bookings/edit.blade.php → Booking edit form/modal
 
-Admin dashboard
+routes/web.php → Routes for the bookings page
 
-Real-time notifications with WebSockets
+routes/api.php → API endpoints for bookings (CRUD)
+
+app/Models/Booking.php → Booking model
+
+app/Http/Controllers/BookingController.php → Handles booking API logic
