@@ -17,9 +17,7 @@ class BookingController extends Controller
     }
 
     public function index() {
-        $bookings = Booking::orderBy('id')->simplePaginate(20);
-
-        return view('bookings.index', compact('bookings'));
+        return view('bookings.index');
     }
 
     public function create(Request $request) {
