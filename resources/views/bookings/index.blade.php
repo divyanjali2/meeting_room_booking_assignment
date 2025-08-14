@@ -23,7 +23,7 @@
             <option value="Room A">Room A</option>
             <option value="Room B">Room B</option>
         </select>
-        <input type="date" x-model="form.date" class="border px-3 py-2 rounded" required>
+        <input type="date" x-model="form.date" :min="today" class="border px-3 py-2 rounded" required>
         <input type="time" x-model="form.start_time" class="border px-3 py-2 rounded" required>
         <input type="time" x-model="form.end_time" class="border px-3 py-2 rounded" required>
         <button type="submit" class="bg-black text-white px-4 py-2 rounded">Add</button>
