@@ -17,13 +17,12 @@ class BookingController extends Controller
     }
 
     public function index() {
-        $bookings = Booking::orderBy('id')->simplePaginate(10);
+        $bookings = Booking::orderBy('id')->simplePaginate(20);
 
         return view('bookings.index', compact('bookings'));
     }
 
-    public function list(Request $request) {
-        // Return all bookings (for table) with user
+    public function create(Request $request) {
         $today = now()->format('Y-m-d');
         $bookings = Booking::with('user')
             ->where('date', '>=', $today)
