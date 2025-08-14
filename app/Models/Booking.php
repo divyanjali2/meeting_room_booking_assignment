@@ -23,12 +23,20 @@ class Booking extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Status: Upcoming / Completed (no column needed)
     protected function status(): Attribute
     {
         return Attribute::get(function () {
+            $now = now(config('app.timezone'));
+            $start = Carbon::parse($this->date->toDateString().' '.$this->start_time, config('app.timezone'));
             $end = Carbon::parse($this->date->toDateString().' '.$this->end_time, config('app.timezone'));
-            return now(config('app.timezone'))->greaterThanOrEqualTo($end) ? 'Completed' : 'Upcoming';
+
+            if ($now->greaterThanOrEqualTo($end)) {
+                return 'Completed';
+            } elseif ($now->greaterThanOrEqualTo($start) && $now->lessThan($end)) {
+                return 'Ongoing';
+            } else {
+                return 'Upcoming';
+            }
         });
     }
 }
