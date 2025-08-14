@@ -75,6 +75,7 @@
                 data: [],
                 mineOnly: false,
                 editingId: null,
+                errors: {},
                 currentSort: { key: 'date', dir: 'asc' },
                 filters: {
                     room: '',
@@ -138,6 +139,13 @@
 
                     try {
                         const token = document.querySelector('meta[name="csrf-token"]').content;
+                        // Format times to ensure HH:mm format
+                        const formatTime = (time) => {
+                            if (!time) return '';
+                            const [hours, minutes] = time.split(':');
+                            return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+                        };
+
                         const response = await fetch(url, {
                             method,
                             headers: {
@@ -148,18 +156,24 @@
                             body: JSON.stringify({
                                 room: this.form.room,
                                 date: this.form.date,
-                                start_time: this.form.start_time,
-                                end_time: this.form.end_time
+                                start_time: formatTime(this.form.start_time),
+                                end_time: formatTime(this.form.end_time)
                             })
                         });
 
                         const data = await response.json();
 
                         if (!response.ok) {
-                            throw new Error(data.message || 'Validation error');
+                            if (response.status === 422) {
+                                this.errors = data.errors || {};
+                                toastr.error(data.message || 'Please check the form for errors');
+                                return;
+                            }
+                            throw new Error(data.message || 'An error occurred');
                         }
 
                         this.editingId = null;
+                        this.errors = {};
                         this.resetForm();
                         await this.fetchData();
                         toastr.success('Booking saved successfully');
@@ -189,11 +203,18 @@
                 },
 
                 editBooking(booking) {
+                    // Format times to ensure HH:mm format for time inputs
+                    const formatTimeForInput = (time) => {
+                        if (!time) return '';
+                        const [hours, minutes] = time.split(':');
+                        return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+                    };
+
                     this.form = {
                         room: booking.room,
                         date: booking.date,
-                        start_time: booking.start_time,
-                        end_time: booking.end_time
+                        start_time: formatTimeForInput(booking.start_time),
+                        end_time: formatTimeForInput(booking.end_time)
                     };
                     this.editingId = booking.id;
                 },
@@ -210,6 +231,7 @@
                         start_time: '',
                         end_time: ''
                     };
+                    this.errors = {};
                 },
 
                 clearFilters() {
