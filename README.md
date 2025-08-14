@@ -42,26 +42,25 @@ This module is a **Laravel + Alpine.js**-based interface for managing **meeting 
    ```bash
    composer install
    npm install && npm run dev
-Set up your .env file with database credentials:
 
-env
-Copy
-Edit
-APP_NAME="Meeting Room Booking"
-DB_DATABASE=meeting_booking
-Run migrations:
+3. Set up your .env file with database credentials:
 
-bash
-Copy
-Edit
-php artisan migrate
-Serve the app:
+``env
 
-bash
-Copy
-Edit
+    APP_NAME="Meeting Room Booking"
+    DB_DATABASE=meeting_booking
+
+4. Run migrations:
+
+    ``bash
+    php artisan migrate
+    
+5. Serve the app:
+``bash
 php artisan serve
-🖱️ Usage
+
+
+## 🖱️ Usage
 Navigate to the Meeting Room Booking page.
 
 Use the filters to narrow down bookings.
@@ -72,22 +71,24 @@ Use the filters to narrow down bookings.
 
 ⏱️ Bookings update automatically every minute.
 
-📌 Notes
+
+## 📌 Notes
 🔐 Only authenticated users can book, edit, or delete bookings.
 
 🏢 Current implementation supports "Room A" and "Room B"; additional rooms can be added in the select options.
 
 ⏰ Time fields are validated to prevent incorrect formats.
 
-📂 File Structure
+
+## 📂 File Structure
 resources/views/bookings.blade.php → Main bookings page
 
 resources/views/bookings/edit.blade.php → Booking edit form/modal
 
 routes/web.php → Routes for the bookings page
 
-routes/api.php → API endpoints for bookings (CRUD)
-
 app/Models/Booking.php → Booking model
 
 app/Http/Controllers/BookingController.php → Handles booking API logic
+
+## Happy Coding!!
