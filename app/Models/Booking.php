@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 class Booking extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = ['room', 'date', 'start_time', 'end_time'];
 
     protected $casts = [
