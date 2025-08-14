@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('date');
             $table->time('start_time');
             $table->time('end_time');
+            $table->enum('status', ['Upcoming', 'Completed'])->default('Upcoming');
             $table->timestamps();
             $table->softDeletes();
 
