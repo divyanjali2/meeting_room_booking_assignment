@@ -45,19 +45,17 @@ This module is a **Laravel + Alpine.js**-based interface for managing **meeting 
 
 3. Set up your .env file with database credentials:
 
-``env
-
     APP_NAME="Meeting Room Booking"
     DB_DATABASE=meeting_booking
 
 4. Run migrations:
 
-    ``bash
+    ```bash
     php artisan migrate
     
 5. Serve the app:
-``bash
-php artisan serve
+    ```bash
+    php artisan serve
 
 
 ## 🖱️ Usage
