@@ -72,7 +72,12 @@
                             throw new Error(`HTTP error! status: ${response.status}`);
                         }
                         const data = await response.json();
-                        this.bookings = data;
+                        // Filter out past bookings
+                        const now = new Date();
+                        this.bookings = data.filter(booking => {
+                            const bookingDate = new Date(booking.date + ' ' + booking.end_time);
+                            return bookingDate > now;
+                        });
                     } catch (error) {
                         console.error('Error:', error);
                         this.error = 'Failed to load bookings. Please try again.';
