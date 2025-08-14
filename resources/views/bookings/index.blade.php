@@ -46,7 +46,7 @@
             </thead>
             <tbody>
                 <template x-for="booking in filteredBookings" :key="booking.id">
-                    <tr :style="booking.date === today ? 'background:#fff7d6;' : ''">
+                    <tr :style="booking.date === today ? 'background:#fff7d6;' : ''" class="text-center">
                         <td class="p-2" x-text="booking.room"></td>
                         <td class="p-2" x-text="booking.date"></td>
                         <td class="p-2" x-text="booking.start_time"></td>
