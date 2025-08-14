@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/bookings', [BookingController::class,'index'])->name('bookings.index');
 
     // AJAX JSON endpoints
-    Route::get('/api/bookings', [BookingController::class,'list']);
+    Route::get('/api/bookings', [BookingController::class,'create']);
     Route::get('/api/bookings/mine', [BookingController::class,'mine']);
     Route::post('/api/bookings', [BookingController::class,'store']);
     Route::put('/api/bookings/{booking}', [BookingController::class,'update']);

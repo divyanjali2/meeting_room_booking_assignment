@@ -4,9 +4,9 @@
     <div class="container mx-auto p-6" x-data="bookings">
         <h1 class="text-2xl font-bold mb-4">Meeting Room Booking</h1>
 
-        {{-- Filters (optional feature) --}}
+        {{-- Filters --}}
         <div class="flex gap-3 mb-4">
-            <select x-model="filters.room" class="border px-3 py-2 rounded">
+            <select x-model="filters.room" class="border px-3 py-2 rounded" style="width: 15%">
                 <option value="">All Rooms</option>
                 <option>Room A</option>
                 <option>Room B</option>
