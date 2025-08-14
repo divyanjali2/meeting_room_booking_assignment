@@ -11,23 +11,24 @@ class Booking extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['room', 'date', 'start_time', 'end_time', 'status'];
+    protected $fillable = ['room', 'date', 'start_time', 'end_time'];
 
     protected $casts = [
         'date' => 'datetime:Y-m-d',
     ];
 
+    protected $appends = ['status'];
+
     public function user() {
         return $this->belongsTo(User::class);
     }
 
-    protected static function booted()
+    // Status: Upcoming / Completed (no column needed)
+    protected function status(): Attribute
     {
-        static::saving(function ($booking) {
-            if (!$booking->isDirty('status')) {
-                $end = Carbon::parse($booking->date->toDateString().' '.$booking->end_time, config('app.timezone'));
-                $booking->status = now(config('app.timezone'))->greaterThanOrEqualTo($end) ? 'Completed' : 'Upcoming';
-            }
+        return Attribute::get(function () {
+            $end = Carbon::parse($this->date->toDateString().' '.$this->end_time, config('app.timezone'));
+            return now(config('app.timezone'))->greaterThanOrEqualTo($end) ? 'Completed' : 'Upcoming';
         });
     }
 }
